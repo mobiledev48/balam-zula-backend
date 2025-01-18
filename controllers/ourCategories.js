@@ -1,6 +1,7 @@
 const { default: mongoose } = require('mongoose');
 const OUR_CATEGORIES = require('../models/ourCategories');
 const OUR_CATEGORIES_ITEMS = require('../models/ourCategoriesItems');
+const ITEM_REVIEW = require('../models/itemReview');
 const cloudinary = require("../utils/Cloudinary");
 
 
@@ -199,6 +200,33 @@ exports.deleteOurCategories = async function (req, res, next) {
 
             await Promise.all(deleteItemImagePromises);
         }
+
+
+
+        // Delete Product Reviews Images from Cloudinary and the Database
+        const productReviews = await ITEM_REVIEW.find({
+            createdBy: { $in: categoryItems.map((item) => item._id) },
+        });
+
+        if (productReviews && productReviews.length > 0) {
+            // Collect all deletion promises for review images
+            const deleteReviewImagePromises = productReviews.map((review) => {
+                if (review.reviewImage && review.reviewImage.length > 0) {
+                    // Map through each image in the reviewImage array
+                    const imageDeletionPromises = review.reviewImage.map((image) =>
+                        cloudinary.uploader.destroy(image.public_id, { resource_type: "image" })
+                    );
+                    return Promise.all(imageDeletionPromises); // Wait for all images in the array to be deleted
+                }
+            });
+
+            // Wait for all review images to be deleted from Cloudinary
+            await Promise.all(deleteReviewImagePromises);
+
+            // Delete the reviews from the database
+            await ITEM_REVIEW.deleteMany({ createdBy: { $in: categoryItems.map((item) => item._id) } });
+        }
+
 
         // Delete the category items from the database
         await OUR_CATEGORIES_ITEMS.deleteMany({ createdBy: deleteId });

@@ -1,6 +1,7 @@
 const { default: mongoose } = require('mongoose');
 const OUR_CATEGORIES_ITEMS = require('../models/ourCategoriesItems');
 const OUR_CATEGORIES = require('../models/ourCategories');
+const ITEM_REVIEW = require('../models/itemReview');
 const WHATSAPP_NUMBER = require('../models/watsappNumber');
 const cloudinary = require("../utils/Cloudinary");
 
@@ -291,6 +292,24 @@ exports.deleteOurCategoriesItems = async function (req, res, next) {
                 })
             );
         }
+
+        const reviewItem = await ITEM_REVIEW.find({ createdBy: deleteId });
+
+        if (reviewItem && reviewItem.length > 0) {
+            const deleteReviewImagePromises = reviewItem.map((item) => {
+                if (item.reviewImage && item.reviewImage.length > 0) {
+                    const deleteImagePromises = item.reviewImage.map((image) => {
+                        // Return the promise from cloudinary.uploader.destroy
+                        return cloudinary.uploader.destroy(image.public_id, { resource_type: "image" });
+                    });
+                    return Promise.all(deleteImagePromises);
+                }
+            });
+
+            await Promise.all(deleteReviewImagePromises);
+        }
+
+        await ITEM_REVIEW.deleteMany({ createdBy: deleteId });
 
         await OUR_CATEGORIES_ITEMS.findByIdAndDelete(deleteId);
 
