@@ -182,25 +182,22 @@ exports.deleteOurCategories = async function (req, res, next) {
             });
         }
 
-        // Delete Categories Items Associated with the Category //
 
-        // Find all category items associated with the category
+        // Delete Categories Items Associated with the Category //
         const categoryItems = await OUR_CATEGORIES_ITEMS.find({ createdBy: deleteId });
 
-        // Delete all images for the associated category items from Cloudinary
         if (categoryItems && categoryItems.length > 0) {
             const deleteItemImagePromises = categoryItems.map((item) => {
                 if (item.images && item.images.length > 0) {
-                    const itemImagePromises = item.images.map((image) =>
-                        cloudinary.uploader.destroy(image.public_id, { resource_type: "image" })
-                    );
+                    const itemImagePromises = item.images.map((image) => {
+                        return cloudinary.uploader.destroy(image.public_id, { resource_type: "image" })
+                    });
                     return Promise.all(itemImagePromises);
                 }
             });
 
             await Promise.all(deleteItemImagePromises);
         }
-
 
 
         // Delete Product Reviews Images from Cloudinary and the Database

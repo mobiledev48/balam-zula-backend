@@ -272,7 +272,7 @@ exports.deleteOurCategoriesItems = async function (req, res, next) {
         const { deleteId } = req.params;
 
         if (!mongoose.Types.ObjectId.isValid(deleteId)) {
-            throw new Error("Invalid Category Id !")
+            throw new Error("Invalid Category Item Id !")
         }
 
         const validateCategoryItem = await OUR_CATEGORIES_ITEMS.findById(deleteId);
@@ -299,7 +299,6 @@ exports.deleteOurCategoriesItems = async function (req, res, next) {
             const deleteReviewImagePromises = reviewItem.map((item) => {
                 if (item.reviewImage && item.reviewImage.length > 0) {
                     const deleteImagePromises = item.reviewImage.map((image) => {
-                        // Return the promise from cloudinary.uploader.destroy
                         return cloudinary.uploader.destroy(image.public_id, { resource_type: "image" });
                     });
                     return Promise.all(deleteImagePromises);

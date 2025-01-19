@@ -22,6 +22,11 @@ exports.addItemReview = async function (req, res, next) {
             }
         }
 
+        if (rating > 5 || rating < 1) {
+            throw new Error("Rating must be between 1 To 5 !");
+        }
+
+
         if (!req.files || !req.files.reviewImage || req.files.reviewImage.length === 0) {
             throw new Error("No images provided ! Please upload at least one image.");
         }
