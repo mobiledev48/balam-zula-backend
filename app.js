@@ -18,6 +18,7 @@ var itemReviewRouter = require('./routes/itemReview');
 var contactUsRouter = require('./routes/contactUs');
 var specialOfferRouter = require('./routes/specialOffer');
 var ourStoryPurposeRouter = require('./routes/ourStoryPurpose');
+var latestProductRouter = require('./routes/latestProduct');
 var adminRouter = require('./routes/admin');
 
 var app = express();
@@ -59,6 +60,7 @@ app.use('/itemReview', itemReviewRouter);
 app.use('/contactUs', contactUsRouter);
 app.use('/specialOffer', specialOfferRouter);
 app.use('/ourStoryPurpose', ourStoryPurposeRouter);
+app.use('/latestProduct', latestProductRouter);
 app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
