@@ -15,6 +15,10 @@ var aboutUsRouter = require('./routes/aboutUs');
 var somethingUniqueRouter = require('./routes/SomethingUnique');
 var watsappNumberRouter = require('./routes/watsappNumber');
 var itemReviewRouter = require('./routes/itemReview');
+var contactUsRouter = require('./routes/contactUs');
+var specialOfferRouter = require('./routes/specialOffer');
+var ourStoryPurposeRouter = require('./routes/ourStoryPurpose');
+var adminRouter = require('./routes/admin');
 
 var app = express();
 
@@ -52,6 +56,10 @@ app.use('/aboutUs', aboutUsRouter);
 app.use('/somethingUnique', somethingUniqueRouter);
 app.use('/watsappNumber', watsappNumberRouter);
 app.use('/itemReview', itemReviewRouter);
+app.use('/contactUs', contactUsRouter);
+app.use('/specialOffer', specialOfferRouter);
+app.use('/ourStoryPurpose', ourStoryPurposeRouter);
+app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
