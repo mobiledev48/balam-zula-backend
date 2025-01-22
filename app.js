@@ -19,6 +19,9 @@ var contactUsRouter = require('./routes/contactUs');
 var specialOfferRouter = require('./routes/specialOffer');
 var ourStoryPurposeRouter = require('./routes/ourStoryPurpose');
 var latestProductRouter = require('./routes/latestProduct');
+var homeSloganRouter = require('./routes/homeSlogan');
+var aboutGalleryRouter = require('./routes/aboutGallery');
+var customerReviewVideoRouter = require('./routes/customerReviewVideo');
 var adminRouter = require('./routes/admin');
 
 var app = express();
@@ -61,6 +64,9 @@ app.use('/contactUs', contactUsRouter);
 app.use('/specialOffer', specialOfferRouter);
 app.use('/ourStoryPurpose', ourStoryPurposeRouter);
 app.use('/latestProduct', latestProductRouter);
+app.use('/homeSlogan', homeSloganRouter);
+app.use('/aboutGallery', aboutGalleryRouter);
+app.use('/customerReviewVideo', customerReviewVideoRouter);
 app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
