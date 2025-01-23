@@ -66,7 +66,7 @@ exports.addSpecialOffer = async function (req, res, next) {
 exports.getSpecialOffer = async function (req, res, next) {
     try {
 
-        const specialOffer = await SPECIAL_OFFER.findOne().sort({ _id: -1 });
+        const specialOffer = await SPECIAL_OFFER.findOne().sort({ _id: 1 });
 
         if (!specialOffer) {
             throw new Error("Special Offer Details Not Found !");
