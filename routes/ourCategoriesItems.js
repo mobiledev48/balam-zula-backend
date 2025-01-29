@@ -12,6 +12,8 @@ router.get('/:Id', ourCategoriesItemController.getSingleOurCategoriesItems);
 
 router.get('/ourCategories/:categoryId', ourCategoriesItemController.getOurCategoriesItemsByCategoryId);
 
+router.get('/someUnique/CategoryItems', ourCategoriesItemController.getOurCategoriesItemsDisplayingInSomethingUnique);
+
 router.put('/:updateId', upload.fields([{ name: 'images', maxCount: 10 }]), ourCategoriesItemController.updateOurCategoriesItems);
 
 router.delete('/:deleteId', ourCategoriesItemController.deleteOurCategoriesItems);

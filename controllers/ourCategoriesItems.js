@@ -9,11 +9,11 @@ const cloudinary = require("../utils/Cloudinary");
 exports.addOurCategoriesItems = async function (req, res, next) {
     try {
         const { name, description, tags, height, width, length, material, createdBy,
-            warranty, hangingSet, cushion, maintenance, customizationAvailable, additionalInformation
+            warranty, hangingSet, cushion, maintenance, customizationAvailable, additionalInformation, isDisplaingInSomethingUnique
         } = req.body;
 
         if (!name || !description || !tags || !height || !width || !length || !material || !createdBy ||
-            !warranty || !hangingSet || !cushion || !maintenance || !customizationAvailable || !additionalInformation
+            !warranty || !hangingSet || !cushion || !maintenance || !customizationAvailable || !additionalInformation || !isDisplaingInSomethingUnique
         ) {
             throw new Error("Please enter all the fields; they are required!");
         }
@@ -88,7 +88,8 @@ exports.addOurCategoriesItems = async function (req, res, next) {
             cushion,
             maintenance: parsedMaintenance,
             customizationAvailable,
-            additionalInformation: parsedAdditionalInformation
+            additionalInformation: parsedAdditionalInformation,
+            isDisplaingInSomethingUnique
         });
 
         await categoryItemData.save();
@@ -163,7 +164,8 @@ exports.getSingleOurCategoriesItems = async function (req, res, next) {
 exports.updateOurCategoriesItems = async function (req, res, next) {
     try {
         const { name, description, tags, height, width, length, material, createdBy,
-            warranty, hangingSet, cushion, maintenance, customizationAvailable, additionalInformation
+            warranty, hangingSet, cushion, maintenance, customizationAvailable, additionalInformation,
+            isDisplaingInSomethingUnique
         } = req.body;
 
         const { updateId } = req.params;
@@ -249,7 +251,8 @@ exports.updateOurCategoriesItems = async function (req, res, next) {
             cushion: cushion || existingCategoryItem.cushion,
             maintenance: parsedMaintenance,
             customizationAvailable: customizationAvailable || existingCategoryItem.customizationAvailable,
-            additionalInformation: parsedAdditionalInformation
+            additionalInformation: parsedAdditionalInformation,
+            isDisplaingInSomethingUnique: isDisplaingInSomethingUnique || existingCategoryItem.isDisplaingInSomethingUnique
         };
 
         // Update the category item in the database
@@ -353,6 +356,28 @@ exports.getOurCategoriesItemsByCategoryId = async function (req, res, next) {
         res.status(200).json({
             message: `Category Items Fetched Successfully By Provided Category Id !`,
             categoryItems,
+            total
+        });
+    } catch (error) {
+        res.status(404).json({
+            message: error.message
+        });
+    }
+}
+
+exports.getOurCategoriesItemsDisplayingInSomethingUnique = async function (req, res, next) {
+    try {
+
+        const categoryItemDataSomethingUnique = await OUR_CATEGORIES_ITEMS.find({ isDisplaingInSomethingUnique: true }).populate('createdBy');
+        const total = await OUR_CATEGORIES_ITEMS.countDocuments({ isDisplaingInSomethingUnique: true });
+
+        if (!categoryItemDataSomethingUnique || categoryItemDataSomethingUnique.length === 0) {
+            throw new Error("Our Category Item Something Unique Data Not Found !");
+        }
+
+        res.status(200).json({
+            message: `Our Category Item Something Unique Fetched Successfully !`,
+            categoryItemDataSomethingUnique,
             total
         });
     } catch (error) {

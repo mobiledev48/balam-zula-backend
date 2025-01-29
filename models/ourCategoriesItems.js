@@ -61,7 +61,10 @@ const OUR_CATEGORIES_ITEMS_SCHEMA = new Schema(
         },
         additionalInformation: [
             String
-        ]
+        ],
+        isDisplaingInSomethingUnique: {
+            type: Boolean
+        }
     },
     {
         timestamps: true
