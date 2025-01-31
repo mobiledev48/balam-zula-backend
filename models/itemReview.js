@@ -30,6 +30,11 @@ const ITEM_REVIEW_SCHEMA = new Schema(
             type: Schema.Types.ObjectId,
             ref: "our_categories_items",
             required: true
+        },
+        status: {
+            type: String,
+            enum: ['Approve', 'Reject'],
+            default: 'Reject'
         }
     },
     {
@@ -38,4 +43,4 @@ const ITEM_REVIEW_SCHEMA = new Schema(
 )
 
 const ITEM_REVIEW_DATA = mongoose.model("item_review", ITEM_REVIEW_SCHEMA);
-module.exports = ITEM_REVIEW_DATA; 
+module.exports = ITEM_REVIEW_DATA;

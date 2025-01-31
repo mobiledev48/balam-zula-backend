@@ -117,15 +117,15 @@ exports.getItemReviewByCategoryItemId = async function (req, res, next) {
             throw new Error("Category Item Not Found !");
         }
 
-        const reviewData = await ITEM_REVIEW.find({ createdBy: itemId }).populate('createdBy');
-        const total = await ITEM_REVIEW.countDocuments({ createdBy: itemId });
+        const reviewData = await ITEM_REVIEW.find({ createdBy: itemId, status: 'Approve' }).populate('createdBy');
+        const total = await ITEM_REVIEW.countDocuments({ createdBy: itemId, status: 'Approve' });
 
         if (!reviewData || reviewData.length === 0) {
-            throw new Error("Review Not Found for Provided Category Item Id !");
+            throw new Error("Review Not Found for Provided Category Item Id Or Review Not Approved !");
         }
 
         res.status(200).json({
-            message: `Review Fetched Successfully By Provided Category Item Id !`,
+            message: `Review Fetched Successfully By Provided Category Item Id With Status Approved !`,
             reviewData,
             total
         });
@@ -170,6 +170,47 @@ exports.deleteItemReview = async function (req, res, next) {
         });
     } catch (error) {
         res.status(404).json({
+            message: error.message
+        });
+    }
+}
+
+exports.updateItemReviewStatus = async function (req, res, next) {
+    try {
+
+        const { updateId } = req.params;
+        const { status } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(updateId)) {
+            throw new Error("Invalid Review Id !")
+        }
+
+        const validateReview = await ITEM_REVIEW.findById(updateId);
+
+        if (!validateReview) {
+            throw new Error("Review Not Found !")
+        }
+
+        const reviewAllowed = ['Approve', 'Reject'];
+
+        if (status) {
+            if (!reviewAllowed.includes(status)) {
+                throw new Error(`Status must be one of ${reviewAllowed.join(', ')} !`);
+            }
+        }
+
+        const updatedData = {
+            status: status || validateReview.status
+        }
+
+        const updatedReviewData = await ITEM_REVIEW.findByIdAndUpdate(updateId, updatedData, { new: true });
+
+        res.status(200).json({
+            message: `Review Updated Successfully !`,
+            updatedReviewData
+        });
+    } catch (error) {
+        res.status(400).json({
             message: error.message
         });
     }

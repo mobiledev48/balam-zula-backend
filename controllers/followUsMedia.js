@@ -6,13 +6,13 @@ const cloudinary = require("../utils/Cloudinary");
 exports.addFollowUsMedia = async function (req, res, next) {
     try {
 
-        const { thumbnail_media_url } = req.body;
+        const { thumbnail_media_url, instagramUserName } = req.body;
 
         if (!req.file) {
             throw new Error("Please Upload Follow Us Media Thumbnail Media !")
         }
 
-        if (!thumbnail_media_url) {
+        if (!thumbnail_media_url || !instagramUserName) {
             throw new Error("Please Enter Media Url it is required !")
         }
 
@@ -44,7 +44,8 @@ exports.addFollowUsMedia = async function (req, res, next) {
                 public_id: imageResult.public_id,
                 url: imageResult.secure_url
             },
-            thumbnail_media_url
+            thumbnail_media_url,
+            instagramUserName
         });
 
         await followUsMediaData.save();
@@ -85,7 +86,7 @@ exports.getFollowUsMedia = async function (req, res, next) {
 
 exports.updateFollowUsMedia = async function (req, res, next) {
     try {
-        const { thumbnail_media_url } = req.body;
+        const { thumbnail_media_url, instagramUserName } = req.body;
         const { updateId } = req.params;
 
         if (!mongoose.Types.ObjectId.isValid(updateId)) {
@@ -137,7 +138,8 @@ exports.updateFollowUsMedia = async function (req, res, next) {
 
         const updatedData = {
             thumbnail_media: updatedThumbnailMedia,
-            thumbnail_media_url: thumbnail_media_url || existingFollowUsMedia.thumbnail_media_url
+            thumbnail_media_url: thumbnail_media_url || existingFollowUsMedia.thumbnail_media_url,
+            instagramUserName: instagramUserName || existingFollowUsMedia.instagramUserName
         };
 
         const updatedFollowUsMediaData = await FOLLOW_US_MEDIA.findByIdAndUpdate(updateId, updatedData, { new: true });

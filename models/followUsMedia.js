@@ -15,6 +15,9 @@ const FOLLOW_US_MEDIA_SCHEMA = new Schema(
         },
         thumbnail_media_url: {
             type: String,
+        },
+        instagramUserName: {
+            type: String,
         }
     },
     {

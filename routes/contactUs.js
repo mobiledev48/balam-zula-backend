@@ -1,15 +1,17 @@
 var express = require('express');
 var router = express.Router();
 var contactUsController = require('../controllers/contactUs');
+const upload = require("../helper/imgmulter");
+const authMiddleware = require('../middleware/authMiddleware');
 
 
-router.post('/add', contactUsController.addContactUs);
+router.post('/add', authMiddleware, upload.single('image'), contactUsController.addContactUs);
 
 router.get('/', contactUsController.getContactUs);
 
-router.put('/:updateId', contactUsController.updateContactUs);
+router.put('/:updateId', authMiddleware, upload.single('image'), contactUsController.updateContactUs);
 
-router.delete('/:deleteId', contactUsController.deleteContactUs);
+router.delete('/:deleteId', authMiddleware, contactUsController.deleteContactUs);
 
 
 module.exports = router;
