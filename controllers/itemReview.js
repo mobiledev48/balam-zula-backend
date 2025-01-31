@@ -83,7 +83,8 @@ exports.addItemReview = async function (req, res, next) {
 exports.getItemReview = async function (req, res, next) {
     try {
 
-        const itemReview = await ITEM_REVIEW.find().populate('createdBy');
+        const { skip, limit } = req.query;
+        const itemReview = await ITEM_REVIEW.find().populate('createdBy').limit(limit).skip(skip);
         const total = await ITEM_REVIEW.countDocuments();
 
         if (!itemReview || itemReview.length === 0) {
