@@ -23,6 +23,8 @@ var homeSloganRouter = require('./routes/homeSlogan');
 var aboutGalleryRouter = require('./routes/aboutGallery');
 var customerReviewVideoRouter = require('./routes/customerReviewVideo');
 var followUsMediaRouter = require('./routes/followUsMedia');
+var aboutFranchiseRouter = require('./routes/aboutFranchise');
+var galleryFranchiseRouter = require('./routes/galleryFranchise');
 var adminRouter = require('./routes/admin');
 
 var app = express();
@@ -69,6 +71,8 @@ app.use('/homeSlogan', homeSloganRouter);
 app.use('/aboutGallery', aboutGalleryRouter);
 app.use('/customerReviewVideo', customerReviewVideoRouter);
 app.use('/followUsMedia', followUsMediaRouter);
+app.use('/aboutFranchise', aboutFranchiseRouter);
+app.use('/galleryFranchise', galleryFranchiseRouter);
 app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
