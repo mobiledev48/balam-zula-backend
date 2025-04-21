@@ -9,9 +9,13 @@ router.post('/add', authMiddleware, upload.single('image'), ourCategoriesControl
 
 router.get('/', ourCategoriesController.getOurCategories);
 
+router.get('/:categoryId', ourCategoriesController.getOurCategoryById);
+
 router.put('/:updateId', authMiddleware, upload.single('image'), ourCategoriesController.updateOurCategories);
 
 router.delete('/:deleteId', authMiddleware, ourCategoriesController.deleteOurCategories);
+
+router.get('/counts/total', ourCategoriesController.getTotalCounts);
 
 
 module.exports = router;

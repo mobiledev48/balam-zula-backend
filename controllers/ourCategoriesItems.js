@@ -12,11 +12,11 @@ exports.addOurCategoriesItems = async function (req, res, next) {
             warranty, hangingSet, cushion, maintenance, customizationAvailable, additionalInformation, isDisplaingInSomethingUnique
         } = req.body;
 
-        if (!name || !description || !tags || !height || !width || !length || !material || !createdBy ||
-            !warranty || !hangingSet || !cushion || !maintenance || !customizationAvailable || !additionalInformation || !isDisplaingInSomethingUnique
-        ) {
-            throw new Error("Please enter all the fields; they are required!");
-        }
+        // if (!name || !description || !tags || !height || !width || !length || !material || !createdBy ||
+        //     !warranty || !hangingSet || !maintenance || !customizationAvailable || !additionalInformation || !isDisplaingInSomethingUnique
+        // ) {
+        //     throw new Error("Please enter all the fields; they are required!");
+        // }
 
         if (createdBy) {
             if (!mongoose.Types.ObjectId.isValid(createdBy)) {
@@ -143,7 +143,7 @@ exports.getSingleOurCategoriesItems = async function (req, res, next) {
             throw new Error("Invalid Category Item Id !");
         }
 
-        const categoryItemData = await OUR_CATEGORIES_ITEMS.findById(Id).populate('createdBy');
+        const categoryItemData = await OUR_CATEGORIES_ITEMS.findById(Id).populate('createdBy'); 
 
         if (!categoryItemData) {
             throw new Error("Our Category Item Not Found with Provided Id !");

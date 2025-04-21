@@ -86,6 +86,31 @@ exports.getOurCategories = async function (req, res, next) {
     }
 }
 
+exports.getOurCategoryById = async function (req, res, next) {
+    try {
+        const { categoryId } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(categoryId)) {
+            throw new Error("Invalid Category Id !");
+        }
+
+        const categoryData = await OUR_CATEGORIES.findById(categoryId);
+
+        if (!categoryData) {
+            throw new Error("Category Not Found !");
+        }
+
+        res.status(200).json({
+            message: "Category Fetched Successfully !",
+            categoryData
+        });
+    } catch (error) {
+        res.status(404).json({
+            message: error.message
+        });
+    }
+}
+
 exports.updateOurCategories = async function (req, res, next) {
     try {
         const { name } = req.body;
@@ -236,6 +261,25 @@ exports.deleteOurCategories = async function (req, res, next) {
         });
     } catch (error) {
         res.status(404).json({
+            message: error.message
+        });
+    }
+}
+
+exports.getTotalCounts = async function (req, res, next) {
+    try {
+        const totalCategories = await OUR_CATEGORIES.countDocuments();
+        const totalCategoryItems = await OUR_CATEGORIES_ITEMS.countDocuments();
+
+        res.status(200).json({
+            message: "Total counts fetched successfully!",
+            data: {
+                totalCategories,
+                totalCategoryItems
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
             message: error.message
         });
     }
